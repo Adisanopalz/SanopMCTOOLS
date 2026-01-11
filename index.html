@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SANOP:MCTOOLS v2.5 - Admin Suite</title>
+    <title>SANOP:MCTOOLS v3.0 - Admin Suite</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome -->
@@ -92,6 +92,34 @@
             opacity: 0;
             pointer-events: none;
         }
+        
+        /* Checkbox Style */
+        .custom-checkbox {
+            appearance: none;
+            background-color: #0f172a;
+            margin: 0;
+            font: inherit;
+            color: currentColor;
+            width: 1.15em;
+            height: 1.15em;
+            border: 0.15em solid #3b82f6;
+            border-radius: 0.15em;
+            display: grid;
+            place-content: center;
+        }
+        .custom-checkbox::before {
+            content: "";
+            width: 0.65em;
+            height: 0.65em;
+            transform: scale(0);
+            transition: 120ms transform ease-in-out;
+            box-shadow: inset 1em 1em #3b82f6;
+            transform-origin: center;
+            clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+        }
+        .custom-checkbox:checked::before {
+            transform: scale(1);
+        }
     </style>
 </head>
 <body class="h-screen flex flex-col md:flex-row overflow-hidden font-sans text-slate-200">
@@ -123,7 +151,7 @@
             </div>
             <div>
                 <h1 class="font-bold text-lg tracking-wider text-white">SANOP</h1>
-                <p class="text-xs text-blue-400 font-mono">v2.5 PRO</p>
+                <p class="text-xs text-blue-400 font-mono">v3.0 LITE</p>
             </div>
         </div>
 
@@ -133,39 +161,33 @@
             <button onclick="switchTab('dashboard')" class="nav-btn w-full text-left px-4 py-2.5 rounded-lg hover:bg-slate-700/50 transition-all text-slate-300 hover:text-white flex items-center gap-3 active-nav bg-blue-600/10 text-blue-400 border border-blue-500/20 shadow-[0_0_15px_rgba(59,130,246,0.1)]" id="btn-dashboard">
                 <i class="fa-solid fa-gauge w-5 text-center"></i> Dashboard
             </button>
-            <button onclick="switchTab('plugins')" class="nav-btn w-full text-left px-4 py-2.5 rounded-lg hover:bg-slate-700/50 transition-all text-slate-300 hover:text-white flex items-center gap-3" id="btn-plugins">
-                <i class="fa-solid fa-plug w-5 text-center text-purple-400"></i> Plugin Helper <span class="text-[9px] bg-purple-500 text-black px-1.5 rounded font-bold ml-auto">NEW</span>
-            </button>
             <button onclick="switchTab('kamus')" class="nav-btn w-full text-left px-4 py-2.5 rounded-lg hover:bg-slate-700/50 transition-all text-slate-300 hover:text-white flex items-center gap-3" id="btn-kamus">
                 <i class="fa-solid fa-book-open w-5 text-center text-teal-400"></i> Kamus Admin
             </button>
-
-            <div class="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-4 mb-2 mt-4">Server Tools</div>
-            
-            <button onclick="switchTab('status')" class="nav-btn w-full text-left px-4 py-2.5 rounded-lg hover:bg-slate-700/50 transition-all text-slate-300 hover:text-white flex items-center gap-3" id="btn-status">
-                <i class="fa-solid fa-signal w-5 text-center"></i> Server Checker
-            </button>
-            <button onclick="switchTab('calc')" class="nav-btn w-full text-left px-4 py-2.5 rounded-lg hover:bg-slate-700/50 transition-all text-slate-300 hover:text-white flex items-center gap-3" id="btn-calc">
-                <i class="fa-solid fa-calculator w-5 text-center"></i> RAM Calc
-            </button>
-            <button onclick="switchTab('scheduler')" class="nav-btn w-full text-left px-4 py-2.5 rounded-lg hover:bg-slate-700/50 transition-all text-slate-300 hover:text-white flex items-center gap-3" id="btn-scheduler">
-                <i class="fa-solid fa-clock w-5 text-center"></i> Scheduler
+             <button onclick="switchTab('checklist')" class="nav-btn w-full text-left px-4 py-2.5 rounded-lg hover:bg-slate-700/50 transition-all text-slate-300 hover:text-white flex items-center gap-3" id="btn-checklist">
+                <i class="fa-solid fa-list-check w-5 text-center text-emerald-400"></i> Maintenance List <span class="text-[9px] bg-emerald-500 text-black px-1.5 rounded font-bold ml-auto">NEW</span>
             </button>
 
-            <div class="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-4 mb-2 mt-4">Design & Config</div>
+            <div class="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-4 mb-2 mt-4">Server Config</div>
             
-            <button onclick="switchTab('motd')" class="nav-btn w-full text-left px-4 py-2.5 rounded-lg hover:bg-slate-700/50 transition-all text-slate-300 hover:text-white flex items-center gap-3" id="btn-motd">
-                <i class="fa-solid fa-pen-nib w-5 text-center"></i> MOTD Editor
+            <button onclick="switchTab('propgen')" class="nav-btn w-full text-left px-4 py-2.5 rounded-lg hover:bg-slate-700/50 transition-all text-slate-300 hover:text-white flex items-center gap-3" id="btn-propgen">
+                <i class="fa-solid fa-sliders w-5 text-center text-orange-400"></i> Properties Gen <span class="text-[9px] bg-orange-500 text-black px-1.5 rounded font-bold ml-auto">HOT</span>
             </button>
-             <button onclick="switchTab('gradient')" class="nav-btn w-full text-left px-4 py-2.5 rounded-lg hover:bg-slate-700/50 transition-all text-slate-300 hover:text-white flex items-center gap-3" id="btn-gradient">
-                <i class="fa-solid fa-rainbow w-5 text-center text-pink-400"></i> RGB Gradient
+             <button onclick="switchTab('announce')" class="nav-btn w-full text-left px-4 py-2.5 rounded-lg hover:bg-slate-700/50 transition-all text-slate-300 hover:text-white flex items-center gap-3" id="btn-announce">
+                <i class="fa-solid fa-bullhorn w-5 text-center text-yellow-400"></i> Announcer
             </button>
-            <button onclick="switchTab('config')" class="nav-btn w-full text-left px-4 py-2.5 rounded-lg hover:bg-slate-700/50 transition-all text-slate-300 hover:text-white flex items-center gap-3" id="btn-config">
-                <i class="fa-solid fa-file-code w-5 text-center"></i> Config Helper
+            <button onclick="switchTab('plugins')" class="nav-btn w-full text-left px-4 py-2.5 rounded-lg hover:bg-slate-700/50 transition-all text-slate-300 hover:text-white flex items-center gap-3" id="btn-plugins">
+                <i class="fa-solid fa-plug w-5 text-center text-purple-400"></i> Plugin Helper
             </button>
 
             <div class="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-4 mb-2 mt-4">Utilities</div>
             
+            <button onclick="switchTab('motd')" class="nav-btn w-full text-left px-4 py-2.5 rounded-lg hover:bg-slate-700/50 transition-all text-slate-300 hover:text-white flex items-center gap-3" id="btn-motd">
+                <i class="fa-solid fa-pen-nib w-5 text-center"></i> MOTD Editor
+            </button>
+            <button onclick="switchTab('status')" class="nav-btn w-full text-left px-4 py-2.5 rounded-lg hover:bg-slate-700/50 transition-all text-slate-300 hover:text-white flex items-center gap-3" id="btn-status">
+                <i class="fa-solid fa-signal w-5 text-center"></i> Server Checker
+            </button>
             <button onclick="switchTab('security')" class="nav-btn w-full text-left px-4 py-2.5 rounded-lg hover:bg-slate-700/50 transition-all text-slate-300 hover:text-white flex items-center gap-3" id="btn-security">
                 <i class="fa-solid fa-shield-halved w-5 text-center"></i> Security Gen
             </button>
@@ -224,35 +246,35 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                 <!-- Highlight Cards -->
-                <div onclick="switchTab('plugins')" class="bg-gradient-to-br from-purple-900/50 to-slate-900 p-6 rounded-xl border border-purple-500/30 hover:border-purple-400 transition-all cursor-pointer group shadow-lg">
+                <div onclick="switchTab('propgen')" class="bg-gradient-to-br from-orange-900/50 to-slate-900 p-6 rounded-xl border border-orange-500/30 hover:border-orange-400 transition-all cursor-pointer group shadow-lg">
                     <div class="flex justify-between items-start mb-4">
-                        <div class="p-3 bg-purple-500/20 rounded-lg text-purple-400">
+                        <div class="p-3 bg-orange-500/20 rounded-lg text-orange-400">
+                            <i class="fa-solid fa-sliders text-2xl"></i>
+                        </div>
+                        <span class="text-xs font-bold bg-orange-500 text-white px-2 py-1 rounded">HOT</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-1">Properties Gen</h3>
+                    <p class="text-sm text-slate-400">Buat file server.properties dengan mudah (PvP, Difficulty, dll).</p>
+                </div>
+
+                <div onclick="switchTab('announce')" class="bg-sanop-card p-6 rounded-xl border border-slate-700 hover:border-yellow-500/50 transition-all cursor-pointer group hover:bg-slate-800/50">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 bg-yellow-500/10 rounded-lg text-yellow-400">
+                            <i class="fa-solid fa-bullhorn text-2xl"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-1">Announcer</h3>
+                    <p class="text-sm text-slate-400">Buat command broadcast/pengumuman server.</p>
+                </div>
+
+                <div onclick="switchTab('plugins')" class="bg-sanop-card p-6 rounded-xl border border-slate-700 hover:border-purple-500/50 transition-all cursor-pointer group hover:bg-slate-800/50">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 bg-purple-500/10 rounded-lg text-purple-400">
                             <i class="fa-solid fa-plug text-2xl"></i>
                         </div>
-                        <span class="text-xs font-bold bg-purple-500 text-white px-2 py-1 rounded">NEW</span>
                     </div>
                     <h3 class="text-xl font-bold text-white mb-1">Plugin Helper</h3>
-                    <p class="text-sm text-slate-400">Generator command instan untuk LuckPerms, Essentials, & WorldEdit.</p>
-                </div>
-
-                <div onclick="switchTab('status')" class="bg-sanop-card p-6 rounded-xl border border-slate-700 hover:border-blue-500/50 transition-all cursor-pointer group hover:bg-slate-800/50">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="p-3 bg-blue-500/10 rounded-lg text-blue-400">
-                            <i class="fa-solid fa-signal text-2xl"></i>
-                        </div>
-                    </div>
-                    <h3 class="text-xl font-bold text-white mb-1">Server Status</h3>
-                    <p class="text-sm text-slate-400">Monitor status online, jumlah player, dan MOTD real-time.</p>
-                </div>
-
-                <div onclick="switchTab('gradient')" class="bg-sanop-card p-6 rounded-xl border border-slate-700 hover:border-pink-500/50 transition-all cursor-pointer group hover:bg-slate-800/50">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="p-3 bg-pink-500/10 rounded-lg text-pink-400">
-                            <i class="fa-solid fa-rainbow text-2xl"></i>
-                        </div>
-                    </div>
-                    <h3 class="text-xl font-bold text-white mb-1">RGB Gradient</h3>
-                    <p class="text-sm text-slate-400">Buat teks gradasi warna-warni untuk rank dan chat.</p>
+                    <p class="text-sm text-slate-400">Generator command LuckPerms & Essentials.</p>
                 </div>
             </div>
 
@@ -269,11 +291,158 @@
             </div>
         </div>
 
-        <!-- NEW: PLUGIN HELPER VIEW -->
+        <!-- NEW: PROPERTIES GENERATOR -->
+        <div id="propgen" class="tool-content">
+            <h2 class="text-2xl font-bold mb-6 flex items-center gap-2"><i class="fa-solid fa-sliders text-orange-400"></i> Server Properties Generator</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="bg-sanop-card p-6 rounded-xl border border-slate-700 space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-xs text-slate-400 block mb-1">Max Players</label>
+                            <input type="number" id="prop-max" value="20" class="w-full bg-slate-900 border border-slate-600 rounded p-2 text-white">
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-400 block mb-1">View Distance</label>
+                            <input type="number" id="prop-view" value="10" class="w-full bg-slate-900 border border-slate-600 rounded p-2 text-white">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-xs text-slate-400 block mb-1">MOTD (Server Name)</label>
+                        <input type="text" id="prop-motd" value="A Minecraft Server" class="w-full bg-slate-900 border border-slate-600 rounded p-2 text-white">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-xs text-slate-400 block mb-1">Difficulty</label>
+                            <select id="prop-diff" class="w-full bg-slate-900 border border-slate-600 rounded p-2 text-white">
+                                <option value="easy">Easy</option>
+                                <option value="normal" selected>Normal</option>
+                                <option value="hard">Hard</option>
+                                <option value="peaceful">Peaceful</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-400 block mb-1">Gamemode</label>
+                            <select id="prop-mode" class="w-full bg-slate-900 border border-slate-600 rounded p-2 text-white">
+                                <option value="survival" selected>Survival</option>
+                                <option value="creative">Creative</option>
+                                <option value="adventure">Adventure</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-y-3 pt-2">
+                        <label class="flex items-center gap-2 text-sm text-slate-300 cursor-pointer">
+                            <input type="checkbox" id="prop-pvp" checked class="custom-checkbox"> PvP Enabled
+                        </label>
+                        <label class="flex items-center gap-2 text-sm text-slate-300 cursor-pointer">
+                            <input type="checkbox" id="prop-nether" checked class="custom-checkbox"> Allow Nether
+                        </label>
+                        <label class="flex items-center gap-2 text-sm text-slate-300 cursor-pointer">
+                            <input type="checkbox" id="prop-fly" class="custom-checkbox"> Allow Flight
+                        </label>
+                        <label class="flex items-center gap-2 text-sm text-slate-300 cursor-pointer">
+                            <input type="checkbox" id="prop-wl" class="custom-checkbox"> White-list
+                        </label>
+                        <label class="flex items-center gap-2 text-sm text-slate-300 cursor-pointer">
+                            <input type="checkbox" id="prop-cmd" checked class="custom-checkbox"> Enable Command Blocks
+                        </label>
+                        <label class="flex items-center gap-2 text-sm text-slate-300 cursor-pointer">
+                            <input type="checkbox" id="prop-cracked" class="custom-checkbox"> Cracked (Online-mode: false)
+                        </label>
+                    </div>
+
+                    <button onclick="genProperties()" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 rounded text-sm transition mt-2">Generate Config</button>
+                </div>
+
+                <div class="bg-sanop-card p-6 rounded-xl border border-slate-700 flex flex-col">
+                    <label class="block text-sm font-bold mb-2 text-slate-300">Hasil (server.properties)</label>
+                    <textarea id="prop-output" readonly class="w-full flex-1 bg-black border border-slate-700 rounded p-3 text-green-400 font-mono text-xs leading-loose resize-none mb-3" placeholder="Klik Generate..."></textarea>
+                    <button onclick="copyToClipboard('prop-output')" class="w-full bg-slate-800 hover:bg-slate-700 text-white py-2 rounded-lg text-sm transition border border-slate-600">
+                        <i class="fa-regular fa-copy"></i> Copy Config
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEW: ANNOUNCER -->
+        <div id="announce" class="tool-content">
+            <h2 class="text-2xl font-bold mb-6 flex items-center gap-2"><i class="fa-solid fa-bullhorn text-yellow-400"></i> Announcement Maker</h2>
+            <div class="bg-sanop-card p-6 rounded-xl border border-slate-700 max-w-3xl">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div class="md:col-span-2">
+                         <label class="text-xs text-slate-400 block mb-1">Pesan Pengumuman</label>
+                         <input type="text" id="ann-msg" placeholder="Server akan restart dalam 5 menit!" class="w-full bg-slate-900 border border-slate-600 rounded p-2 text-white">
+                    </div>
+                    <div>
+                         <label class="text-xs text-slate-400 block mb-1">Warna Teks</label>
+                         <select id="ann-color" class="w-full bg-slate-900 border border-slate-600 rounded p-2 text-white">
+                             <option value="red">Merah</option>
+                             <option value="green">Hijau</option>
+                             <option value="yellow" selected>Kuning</option>
+                             <option value="aqua">Biru Muda</option>
+                             <option value="gold">Emas</option>
+                             <option value="light_purple">Pink</option>
+                         </select>
+                    </div>
+                </div>
+                <div class="flex gap-4 mb-6">
+                    <div class="flex-1 p-3 bg-slate-800 rounded border border-slate-700 cursor-pointer hover:bg-slate-700 transition" onclick="genBroadcast('chat')">
+                        <div class="font-bold text-white mb-1"><i class="fa-solid fa-comment-dots"></i> Chat Broadcast</div>
+                        <div class="text-xs text-slate-400">Muncul di chatbox semua player.</div>
+                    </div>
+                    <div class="flex-1 p-3 bg-slate-800 rounded border border-slate-700 cursor-pointer hover:bg-slate-700 transition" onclick="genBroadcast('title')">
+                        <div class="font-bold text-white mb-1"><i class="fa-solid fa-heading"></i> Title Screen</div>
+                        <div class="text-xs text-slate-400">Muncul besar di tengah layar.</div>
+                    </div>
+                </div>
+                
+                <div class="bg-black p-3 rounded border border-slate-700 flex justify-between items-center">
+                    <code id="ann-result" class="text-yellow-400 text-sm font-mono">...</code>
+                    <button onclick="copyToClipboard('ann-result-val')" class="text-xs bg-slate-800 px-2 py-1 rounded text-white hover:bg-slate-700">Copy</button>
+                    <input type="hidden" id="ann-result-val">
+                </div>
+            </div>
+        </div>
+
+        <!-- NEW: CHECKLIST -->
+        <div id="checklist" class="tool-content">
+            <h2 class="text-2xl font-bold mb-6 flex items-center gap-2"><i class="fa-solid fa-list-check text-emerald-400"></i> Maintenance Checklist</h2>
+             <div class="bg-sanop-card p-6 rounded-xl border border-slate-700 max-w-2xl">
+                 <p class="text-sm text-slate-400 mb-4">Gunakan ini agar tidak lupa langkah penting saat maintenance.</p>
+                 <div class="space-y-3">
+                     <label class="flex items-center gap-3 p-3 bg-slate-900/50 rounded border border-slate-700 cursor-pointer hover:bg-slate-900">
+                         <input type="checkbox" class="custom-checkbox">
+                         <span class="text-slate-300 text-sm">Beritahu player 10 menit sebelum restart (/say)</span>
+                     </label>
+                     <label class="flex items-center gap-3 p-3 bg-slate-900/50 rounded border border-slate-700 cursor-pointer hover:bg-slate-900">
+                         <input type="checkbox" class="custom-checkbox">
+                         <span class="text-slate-300 text-sm">Kick semua player (/kickall)</span>
+                     </label>
+                      <label class="flex items-center gap-3 p-3 bg-slate-900/50 rounded border border-slate-700 cursor-pointer hover:bg-slate-900">
+                         <input type="checkbox" class="custom-checkbox">
+                         <span class="text-slate-300 text-sm">Matikan server dengan aman (/stop)</span>
+                     </label>
+                      <label class="flex items-center gap-3 p-3 bg-slate-900/50 rounded border border-slate-700 cursor-pointer hover:bg-slate-900">
+                         <input type="checkbox" class="custom-checkbox">
+                         <span class="text-slate-300 text-sm">Backup folder world/database</span>
+                     </label>
+                      <label class="flex items-center gap-3 p-3 bg-slate-900/50 rounded border border-slate-700 cursor-pointer hover:bg-slate-900">
+                         <input type="checkbox" class="custom-checkbox">
+                         <span class="text-slate-300 text-sm">Update plugin/jar file</span>
+                     </label>
+                      <label class="flex items-center gap-3 p-3 bg-slate-900/50 rounded border border-slate-700 cursor-pointer hover:bg-slate-900">
+                         <input type="checkbox" class="custom-checkbox">
+                         <span class="text-slate-300 text-sm">Nyalakan server & Cek console log</span>
+                     </label>
+                 </div>
+                 <button onclick="document.querySelectorAll('#checklist input').forEach(i => i.checked = false); showToast('Checklist di-reset')" class="mt-4 text-xs text-red-400 hover:text-red-300 underline">Reset Checklist</button>
+             </div>
+        </div>
+
+        <!-- PLUGIN HELPER (Existing) -->
         <div id="plugins" class="tool-content">
             <h2 class="text-2xl font-bold mb-6 flex items-center gap-2"><i class="fa-solid fa-plug text-purple-400"></i> Plugin Helper</h2>
             
-            <!-- LuckPerms Section -->
             <div class="bg-sanop-card p-6 rounded-xl border border-slate-700 mb-6">
                 <div class="flex items-center gap-3 mb-4 border-b border-slate-700 pb-2">
                     <i class="fa-solid fa-shield-cat text-green-400 text-xl"></i>
@@ -298,8 +467,7 @@
                     <input type="hidden" id="lp-result-val">
                 </div>
             </div>
-
-            <!-- Essentials / General Section -->
+             <!-- Essentials / General Section -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="bg-sanop-card p-6 rounded-xl border border-slate-700">
                     <div class="flex items-center gap-3 mb-4 border-b border-slate-700 pb-2">
@@ -314,8 +482,7 @@
                         <button onclick="copyCmd('/weather clear')" class="w-full bg-slate-800 hover:bg-slate-700 text-left px-3 py-2 rounded text-sm text-blue-200 font-mono border border-slate-700">/weather clear</button>
                     </div>
                 </div>
-
-                <!-- WorldEdit Section -->
+                 <!-- WorldEdit Section -->
                 <div class="bg-sanop-card p-6 rounded-xl border border-slate-700">
                     <div class="flex items-center gap-3 mb-4 border-b border-slate-700 pb-2">
                         <i class="fa-solid fa-hammer text-red-400 text-xl"></i>
@@ -343,43 +510,6 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="kamus-container">
                 <!-- Items inserted via JS -->
-            </div>
-        </div>
-
-        <!-- GRADIENT GEN VIEW -->
-        <div id="gradient" class="tool-content">
-            <h2 class="text-2xl font-bold mb-6 flex items-center gap-2"><i class="fa-solid fa-rainbow text-pink-400"></i> RGB Gradient Generator</h2>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div class="space-y-6">
-                    <div class="bg-sanop-card p-6 rounded-xl border border-slate-700">
-                        <label class="block text-sm font-bold mb-2 text-slate-300">Teks Anda</label>
-                        <input type="text" id="grad-text" value="SANOP SERVER" oninput="updateGradient()" class="w-full bg-slate-900 border border-slate-600 rounded p-3 text-white font-bold mb-4">
-                        
-                        <div class="flex gap-4">
-                            <div class="flex-1">
-                                <label class="block text-xs text-slate-400 mb-1">Warna Awal</label>
-                                <input type="color" id="grad-start" value="#3b82f6" oninput="updateGradient()" class="w-full h-10 rounded cursor-pointer bg-slate-800 border-0 p-1">
-                            </div>
-                            <div class="flex-1">
-                                <label class="block text-xs text-slate-400 mb-1">Warna Akhir</label>
-                                <input type="color" id="grad-end" value="#ec4899" oninput="updateGradient()" class="w-full h-10 rounded cursor-pointer bg-slate-800 border-0 p-1">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-sanop-card p-6 rounded-xl border border-slate-700 flex flex-col justify-center items-center text-center">
-                    <label class="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">Preview Result</label>
-                    <div id="grad-preview" class="text-4xl md:text-5xl font-extrabold mb-8 minecraft-font tracking-wide">SANOP SERVER</div>
-                    
-                    <div class="w-full space-y-2">
-                        <div class="relative group">
-                            <div class="text-[10px] text-slate-400 text-left mb-1">Hex Codes (Plugin Modern)</div>
-                            <input type="text" id="grad-out-hex" readonly class="w-full bg-black/50 border border-slate-700 rounded p-2 text-xs text-slate-300 font-mono">
-                            <button onclick="copyToClipboard('grad-out-hex')" class="absolute right-2 bottom-2 text-xs bg-slate-700 hover:bg-slate-600 text-white px-2 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity">Copy</button>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -587,52 +717,6 @@
             </div>
         </div>
 
-        <!-- SCHEDULER (CRON) -->
-        <div id="scheduler" class="tool-content">
-            <h2 class="text-2xl font-bold mb-6 flex items-center gap-2"><i class="fa-solid fa-clock text-red-500"></i> Auto-Restart Scheduler</h2>
-            <div class="bg-sanop-card p-6 rounded-xl border border-slate-700 max-w-2xl relative overflow-hidden">
-                <div class="absolute top-0 right-0 p-4 opacity-10">
-                    <i class="fa-solid fa-robot text-9xl"></i>
-                </div>
-                
-                <div class="grid grid-cols-4 gap-2 mb-6 relative z-10">
-                    <div class="text-center">
-                        <label class="block text-[10px] text-slate-500 mb-1 uppercase">Menit</label>
-                        <input type="text" id="cron-min" value="0" oninput="updateCron()" class="w-full bg-slate-900 border border-slate-600 rounded p-2 text-center text-white font-mono focus:border-red-500 outline-none">
-                    </div>
-                    <div class="text-center">
-                        <label class="block text-[10px] text-slate-500 mb-1 uppercase">Jam</label>
-                        <input type="text" id="cron-hour" value="0" oninput="updateCron()" class="w-full bg-slate-900 border border-slate-600 rounded p-2 text-center text-white font-mono focus:border-red-500 outline-none">
-                    </div>
-                    <div class="text-center">
-                        <label class="block text-[10px] text-slate-500 mb-1 uppercase">Hari</label>
-                        <input type="text" id="cron-day" value="*" oninput="updateCron()" class="w-full bg-slate-900 border border-slate-600 rounded p-2 text-center text-white font-mono focus:border-red-500 outline-none">
-                    </div>
-                    <div class="text-center">
-                        <label class="block text-[10px] text-slate-500 mb-1 uppercase">Bulan</label>
-                        <input type="text" id="cron-month" value="*" oninput="updateCron()" class="w-full bg-slate-900 border border-slate-600 rounded p-2 text-center text-white font-mono focus:border-red-500 outline-none">
-                    </div>
-                </div>
-
-                <div class="bg-black p-4 rounded-lg border border-slate-700 flex items-center justify-between mb-2 relative z-10">
-                    <span id="cron-result" class="text-2xl font-mono text-red-400 font-bold tracking-widest">0 0 * * *</span>
-                    <button onclick="copyToClipboard('cron-result-text')" class="bg-slate-800 hover:bg-slate-700 text-white px-3 py-1 rounded text-xs border border-slate-600">Copy</button>
-                    <input type="hidden" id="cron-result-text" value="0 0 * * *">
-                </div>
-                <p id="cron-human" class="text-sm text-slate-400 italic mb-6 relative z-10">Setiap hari pada pukul 00:00</p>
-                
-                <div class="relative z-10">
-                    <h4 class="text-xs font-bold text-slate-500 mb-2 uppercase">Preset Jadwal</h4>
-                    <div class="flex flex-wrap gap-2">
-                        <button onclick="setCron('0', '0', '*', '*');" class="bg-slate-800 hover:bg-red-900/30 text-slate-300 text-xs px-3 py-2 rounded border border-slate-700 transition">Tengah Malam (00:00)</button>
-                        <button onclick="setCron('0', '12', '*', '*');" class="bg-slate-800 hover:bg-red-900/30 text-slate-300 text-xs px-3 py-2 rounded border border-slate-700 transition">Siang (12:00)</button>
-                        <button onclick="setCron('0', '*/6', '*', '*');" class="bg-slate-800 hover:bg-red-900/30 text-slate-300 text-xs px-3 py-2 rounded border border-slate-700 transition">Tiap 6 Jam</button>
-                        <button onclick="setCron('*/30', '*', '*', '*');" class="bg-slate-800 hover:bg-red-900/30 text-slate-300 text-xs px-3 py-2 rounded border border-slate-700 transition">Tiap 30 Menit</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- SECURITY GEN VIEW -->
         <div id="security" class="tool-content">
             <h2 class="text-2xl font-bold mb-6 flex items-center gap-2"><i class="fa-solid fa-shield-halved text-green-500"></i> Security Generator</h2>
@@ -754,7 +838,58 @@
             }
         }
 
-        // --- PLUGIN HELPER LOGIC (NEW) ---
+        // --- NEW: PROPERTIES GEN LOGIC ---
+        function genProperties() {
+            const max = document.getElementById('prop-max').value;
+            const view = document.getElementById('prop-view').value;
+            const motd = document.getElementById('prop-motd').value;
+            const diff = document.getElementById('prop-diff').value;
+            const mode = document.getElementById('prop-mode').value;
+            
+            const pvp = document.getElementById('prop-pvp').checked;
+            const nether = document.getElementById('prop-nether').checked;
+            const fly = document.getElementById('prop-fly').checked;
+            const wl = document.getElementById('prop-wl').checked;
+            const cmd = document.getElementById('prop-cmd').checked;
+            const cracked = document.getElementById('prop-cracked').checked;
+
+            let conf = `#Minecraft Server Properties
+#Generated by SANOP:MCTOOLS
+server-port=25565
+motd=${motd}
+max-players=${max}
+view-distance=${view}
+difficulty=${diff}
+gamemode=${mode}
+pvp=${pvp}
+allow-nether=${nether}
+allow-flight=${fly}
+white-list=${wl}
+enable-command-block=${cmd}
+online-mode=${!cracked}
+`;
+            document.getElementById('prop-output').value = conf;
+            showToast("Konfigurasi server.properties dibuat!");
+        }
+
+        // --- NEW: ANNOUNCER LOGIC ---
+        function genBroadcast(type) {
+            const msg = document.getElementById('ann-msg').value || "Hello World";
+            const color = document.getElementById('ann-color').value;
+            
+            let cmd = "";
+            if(type === 'chat') {
+                cmd = `/tellraw @a {"text":"[ANNOUNCE] ${msg}","color":"${color}","bold":true}`;
+            } else {
+                cmd = `/title @a title {"text":"${msg}","color":"${color}"}`;
+            }
+            
+            document.getElementById('ann-result').innerText = cmd;
+            document.getElementById('ann-result-val').value = cmd;
+            showToast(`Command ${type} dibuat!`);
+        }
+
+        // --- PLUGIN HELPER LOGIC ---
         function genLP() {
             const user = document.getElementById('lp-user').value || "player";
             const group = document.getElementById('lp-group').value || "default";
@@ -830,22 +965,6 @@
                 const text = card.innerText.toLowerCase();
                 card.style.display = text.includes(query) ? 'block' : 'none';
             });
-        }
-
-        // --- GRADIENT GENERATOR ---
-        function updateGradient() {
-            const text = document.getElementById('grad-text').value || "SAMPLE";
-            const start = document.getElementById('grad-start').value;
-            const end = document.getElementById('grad-end').value;
-            
-            const preview = document.getElementById('grad-preview');
-            preview.innerText = text;
-            preview.style.background = `linear-gradient(to right, ${start}, ${end})`;
-            preview.style.webkitBackgroundClip = "text";
-            preview.style.webkitTextFillColor = "transparent";
-
-            // Simple Hex Gen Logic
-            document.getElementById('grad-out-hex').value = `<gradient:${start}:${end}>${text}</gradient>`;
         }
 
         // --- NAVIGATION LOGIC ---
@@ -976,24 +1095,6 @@
              showToast("Kalkulasi RAM selesai.");
         }
         
-        function updateCron() {
-            const min = document.getElementById('cron-min').value;
-            const hour = document.getElementById('cron-hour').value;
-            const day = document.getElementById('cron-day').value;
-            const month = document.getElementById('cron-month').value;
-            const str = `${min} ${hour} ${day} ${month} *`;
-            document.getElementById('cron-result').innerText = str;
-            document.getElementById('cron-result-text').value = str;
-        }
-        function setCron(m, h, d, mo) {
-            document.getElementById('cron-min').value = m;
-            document.getElementById('cron-hour').value = h;
-            document.getElementById('cron-day').value = d;
-            document.getElementById('cron-month').value = mo;
-            updateCron();
-            showToast("Preset jadwal diterapkan.");
-        }
-
         function calcStack() {
             let total = parseInt(document.getElementById('stack-total').value) || 0;
             let size = parseInt(document.getElementById('stack-size').value) || 64;
@@ -1062,11 +1163,12 @@
         window.onload = function() {
             checkSession();
             renderKamus();
-            updateGradient();
+            // Removed updateGradient call
             const savedNotes = localStorage.getItem('sanop_admin_notes');
             if(savedNotes) document.getElementById('admin-notes').value = savedNotes;
             generatePassword();
             generateUUID();
+            genProperties(); // Init default properties
         };
 
     </script>
