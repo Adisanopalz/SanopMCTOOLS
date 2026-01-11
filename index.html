@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SANOP:MCTOOLS v3.0 - Admin Suite</title>
+    <title>SANOP:MCTOOLS v3.5 - Admin Suite</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome -->
@@ -151,7 +151,7 @@
             </div>
             <div>
                 <h1 class="font-bold text-lg tracking-wider text-white">SANOP</h1>
-                <p class="text-xs text-blue-400 font-mono">v3.0 LITE</p>
+                <p class="text-xs text-blue-400 font-mono">v3.5 PRO</p>
             </div>
         </div>
 
@@ -164,20 +164,18 @@
             <button onclick="switchTab('kamus')" class="nav-btn w-full text-left px-4 py-2.5 rounded-lg hover:bg-slate-700/50 transition-all text-slate-300 hover:text-white flex items-center gap-3" id="btn-kamus">
                 <i class="fa-solid fa-book-open w-5 text-center text-teal-400"></i> Kamus Admin
             </button>
-             <button onclick="switchTab('checklist')" class="nav-btn w-full text-left px-4 py-2.5 rounded-lg hover:bg-slate-700/50 transition-all text-slate-300 hover:text-white flex items-center gap-3" id="btn-checklist">
-                <i class="fa-solid fa-list-check w-5 text-center text-emerald-400"></i> Maintenance List <span class="text-[9px] bg-emerald-500 text-black px-1.5 rounded font-bold ml-auto">NEW</span>
-            </button>
 
             <div class="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-4 mb-2 mt-4">Server Config</div>
             
             <button onclick="switchTab('propgen')" class="nav-btn w-full text-left px-4 py-2.5 rounded-lg hover:bg-slate-700/50 transition-all text-slate-300 hover:text-white flex items-center gap-3" id="btn-propgen">
                 <i class="fa-solid fa-sliders w-5 text-center text-orange-400"></i> Properties Gen <span class="text-[9px] bg-orange-500 text-black px-1.5 rounded font-bold ml-auto">HOT</span>
             </button>
+            <!-- Merged Announcer & Checklist -->
              <button onclick="switchTab('announce')" class="nav-btn w-full text-left px-4 py-2.5 rounded-lg hover:bg-slate-700/50 transition-all text-slate-300 hover:text-white flex items-center gap-3" id="btn-announce">
-                <i class="fa-solid fa-bullhorn w-5 text-center text-yellow-400"></i> Announcer
+                <i class="fa-solid fa-bullhorn w-5 text-center text-yellow-400"></i> Comms & Tasks
             </button>
             <button onclick="switchTab('plugins')" class="nav-btn w-full text-left px-4 py-2.5 rounded-lg hover:bg-slate-700/50 transition-all text-slate-300 hover:text-white flex items-center gap-3" id="btn-plugins">
-                <i class="fa-solid fa-plug w-5 text-center text-purple-400"></i> Plugin Helper
+                <i class="fa-solid fa-plug w-5 text-center text-purple-400"></i> Plugin Helper <span class="text-[9px] bg-purple-500 text-black px-1.5 rounded font-bold ml-auto">+3</span>
             </button>
 
             <div class="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-4 mb-2 mt-4">Utilities</div>
@@ -263,8 +261,8 @@
                             <i class="fa-solid fa-bullhorn text-2xl"></i>
                         </div>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-1">Announcer</h3>
-                    <p class="text-sm text-slate-400">Buat command broadcast/pengumuman server.</p>
+                    <h3 class="text-xl font-bold text-white mb-1">Comms & Tasks</h3>
+                    <p class="text-sm text-slate-400">Broadcast pengumuman dan checklist maintenance.</p>
                 </div>
 
                 <div onclick="switchTab('plugins')" class="bg-sanop-card p-6 rounded-xl border border-slate-700 hover:border-purple-500/50 transition-all cursor-pointer group hover:bg-slate-800/50">
@@ -274,7 +272,7 @@
                         </div>
                     </div>
                     <h3 class="text-xl font-bold text-white mb-1">Plugin Helper</h3>
-                    <p class="text-sm text-slate-400">Generator command LuckPerms & Essentials.</p>
+                    <p class="text-sm text-slate-400">Generator command 6 Plugin populer.</p>
                 </div>
             </div>
 
@@ -364,141 +362,172 @@
             </div>
         </div>
 
-        <!-- NEW: ANNOUNCER -->
+        <!-- MERGED: ANNOUNCER & CHECKLIST -->
         <div id="announce" class="tool-content">
-            <h2 class="text-2xl font-bold mb-6 flex items-center gap-2"><i class="fa-solid fa-bullhorn text-yellow-400"></i> Announcement Maker</h2>
-            <div class="bg-sanop-card p-6 rounded-xl border border-slate-700 max-w-3xl">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                    <div class="md:col-span-2">
-                         <label class="text-xs text-slate-400 block mb-1">Pesan Pengumuman</label>
-                         <input type="text" id="ann-msg" placeholder="Server akan restart dalam 5 menit!" class="w-full bg-slate-900 border border-slate-600 rounded p-2 text-white">
+            <h2 class="text-2xl font-bold mb-6 flex items-center gap-2"><i class="fa-solid fa-bullhorn text-yellow-400"></i> Communication & Maintenance</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Announcer Section -->
+                <div class="bg-sanop-card p-6 rounded-xl border border-slate-700">
+                    <h3 class="font-bold text-lg mb-4 text-white flex items-center gap-2"><i class="fa-solid fa-bullhorn text-yellow-500"></i> Broadcast Maker</h3>
+                    <div class="space-y-4 mb-4">
+                        <div>
+                             <label class="text-xs text-slate-400 block mb-1">Pesan Pengumuman</label>
+                             <input type="text" id="ann-msg" placeholder="Server akan restart dalam 5 menit!" class="w-full bg-slate-900 border border-slate-600 rounded p-2 text-white">
+                        </div>
+                        <div>
+                             <label class="text-xs text-slate-400 block mb-1">Warna Teks</label>
+                             <select id="ann-color" class="w-full bg-slate-900 border border-slate-600 rounded p-2 text-white">
+                                 <option value="red">Merah</option>
+                                 <option value="green">Hijau</option>
+                                 <option value="yellow" selected>Kuning</option>
+                                 <option value="aqua">Biru Muda</option>
+                                 <option value="gold">Emas</option>
+                                 <option value="light_purple">Pink</option>
+                             </select>
+                        </div>
                     </div>
-                    <div>
-                         <label class="text-xs text-slate-400 block mb-1">Warna Teks</label>
-                         <select id="ann-color" class="w-full bg-slate-900 border border-slate-600 rounded p-2 text-white">
-                             <option value="red">Merah</option>
-                             <option value="green">Hijau</option>
-                             <option value="yellow" selected>Kuning</option>
-                             <option value="aqua">Biru Muda</option>
-                             <option value="gold">Emas</option>
-                             <option value="light_purple">Pink</option>
-                         </select>
+                    <div class="flex gap-4 mb-6">
+                        <div class="flex-1 p-3 bg-slate-800 rounded border border-slate-700 cursor-pointer hover:bg-slate-700 transition text-center" onclick="genBroadcast('chat')">
+                            <div class="font-bold text-white mb-1"><i class="fa-solid fa-comment-dots"></i> Chat</div>
+                            <div class="text-[10px] text-slate-400">Ke Chatbox</div>
+                        </div>
+                        <div class="flex-1 p-3 bg-slate-800 rounded border border-slate-700 cursor-pointer hover:bg-slate-700 transition text-center" onclick="genBroadcast('title')">
+                            <div class="font-bold text-white mb-1"><i class="fa-solid fa-heading"></i> Title</div>
+                            <div class="text-[10px] text-slate-400">Ke Layar</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-black p-3 rounded border border-slate-700 flex justify-between items-center">
+                        <code id="ann-result" class="text-yellow-400 text-xs font-mono truncate mr-2">...</code>
+                        <button onclick="copyToClipboard('ann-result-val')" class="text-xs bg-slate-800 px-2 py-1 rounded text-white hover:bg-slate-700">Copy</button>
+                        <input type="hidden" id="ann-result-val">
                     </div>
                 </div>
-                <div class="flex gap-4 mb-6">
-                    <div class="flex-1 p-3 bg-slate-800 rounded border border-slate-700 cursor-pointer hover:bg-slate-700 transition" onclick="genBroadcast('chat')">
-                        <div class="font-bold text-white mb-1"><i class="fa-solid fa-comment-dots"></i> Chat Broadcast</div>
-                        <div class="text-xs text-slate-400">Muncul di chatbox semua player.</div>
+
+                <!-- Checklist Section -->
+                <div class="bg-sanop-card p-6 rounded-xl border border-slate-700">
+                    <h3 class="font-bold text-lg mb-4 text-white flex items-center gap-2"><i class="fa-solid fa-list-check text-emerald-400"></i> Maintenance Checklist</h3>
+                    <div class="space-y-3" id="checklist-items">
+                         <label class="flex items-center gap-3 p-3 bg-slate-900/50 rounded border border-slate-700 cursor-pointer hover:bg-slate-900">
+                             <input type="checkbox" class="custom-checkbox">
+                             <span class="text-slate-300 text-sm">Info Player 10 menit sebelum restart</span>
+                         </label>
+                         <label class="flex items-center gap-3 p-3 bg-slate-900/50 rounded border border-slate-700 cursor-pointer hover:bg-slate-900">
+                             <input type="checkbox" class="custom-checkbox">
+                             <span class="text-slate-300 text-sm">Kick semua player (/kickall)</span>
+                         </label>
+                          <label class="flex items-center gap-3 p-3 bg-slate-900/50 rounded border border-slate-700 cursor-pointer hover:bg-slate-900">
+                             <input type="checkbox" class="custom-checkbox">
+                             <span class="text-slate-300 text-sm">Matikan server aman (/stop)</span>
+                         </label>
+                          <label class="flex items-center gap-3 p-3 bg-slate-900/50 rounded border border-slate-700 cursor-pointer hover:bg-slate-900">
+                             <input type="checkbox" class="custom-checkbox">
+                             <span class="text-slate-300 text-sm">Backup world & database</span>
+                         </label>
+                          <label class="flex items-center gap-3 p-3 bg-slate-900/50 rounded border border-slate-700 cursor-pointer hover:bg-slate-900">
+                             <input type="checkbox" class="custom-checkbox">
+                             <span class="text-slate-300 text-sm">Update plugin/jar file</span>
+                         </label>
+                          <label class="flex items-center gap-3 p-3 bg-slate-900/50 rounded border border-slate-700 cursor-pointer hover:bg-slate-900">
+                             <input type="checkbox" class="custom-checkbox">
+                             <span class="text-slate-300 text-sm">Nyalakan server & Cek log</span>
+                         </label>
                     </div>
-                    <div class="flex-1 p-3 bg-slate-800 rounded border border-slate-700 cursor-pointer hover:bg-slate-700 transition" onclick="genBroadcast('title')">
-                        <div class="font-bold text-white mb-1"><i class="fa-solid fa-heading"></i> Title Screen</div>
-                        <div class="text-xs text-slate-400">Muncul besar di tengah layar.</div>
-                    </div>
-                </div>
-                
-                <div class="bg-black p-3 rounded border border-slate-700 flex justify-between items-center">
-                    <code id="ann-result" class="text-yellow-400 text-sm font-mono">...</code>
-                    <button onclick="copyToClipboard('ann-result-val')" class="text-xs bg-slate-800 px-2 py-1 rounded text-white hover:bg-slate-700">Copy</button>
-                    <input type="hidden" id="ann-result-val">
+                    <button onclick="document.querySelectorAll('#checklist-items input').forEach(i => i.checked = false); showToast('Checklist di-reset')" class="mt-4 text-xs text-red-400 hover:text-red-300 underline">Reset Checklist</button>
                 </div>
             </div>
         </div>
 
-        <!-- NEW: CHECKLIST -->
-        <div id="checklist" class="tool-content">
-            <h2 class="text-2xl font-bold mb-6 flex items-center gap-2"><i class="fa-solid fa-list-check text-emerald-400"></i> Maintenance Checklist</h2>
-             <div class="bg-sanop-card p-6 rounded-xl border border-slate-700 max-w-2xl">
-                 <p class="text-sm text-slate-400 mb-4">Gunakan ini agar tidak lupa langkah penting saat maintenance.</p>
-                 <div class="space-y-3">
-                     <label class="flex items-center gap-3 p-3 bg-slate-900/50 rounded border border-slate-700 cursor-pointer hover:bg-slate-900">
-                         <input type="checkbox" class="custom-checkbox">
-                         <span class="text-slate-300 text-sm">Beritahu player 10 menit sebelum restart (/say)</span>
-                     </label>
-                     <label class="flex items-center gap-3 p-3 bg-slate-900/50 rounded border border-slate-700 cursor-pointer hover:bg-slate-900">
-                         <input type="checkbox" class="custom-checkbox">
-                         <span class="text-slate-300 text-sm">Kick semua player (/kickall)</span>
-                     </label>
-                      <label class="flex items-center gap-3 p-3 bg-slate-900/50 rounded border border-slate-700 cursor-pointer hover:bg-slate-900">
-                         <input type="checkbox" class="custom-checkbox">
-                         <span class="text-slate-300 text-sm">Matikan server dengan aman (/stop)</span>
-                     </label>
-                      <label class="flex items-center gap-3 p-3 bg-slate-900/50 rounded border border-slate-700 cursor-pointer hover:bg-slate-900">
-                         <input type="checkbox" class="custom-checkbox">
-                         <span class="text-slate-300 text-sm">Backup folder world/database</span>
-                     </label>
-                      <label class="flex items-center gap-3 p-3 bg-slate-900/50 rounded border border-slate-700 cursor-pointer hover:bg-slate-900">
-                         <input type="checkbox" class="custom-checkbox">
-                         <span class="text-slate-300 text-sm">Update plugin/jar file</span>
-                     </label>
-                      <label class="flex items-center gap-3 p-3 bg-slate-900/50 rounded border border-slate-700 cursor-pointer hover:bg-slate-900">
-                         <input type="checkbox" class="custom-checkbox">
-                         <span class="text-slate-300 text-sm">Nyalakan server & Cek console log</span>
-                     </label>
-                 </div>
-                 <button onclick="document.querySelectorAll('#checklist input').forEach(i => i.checked = false); showToast('Checklist di-reset')" class="mt-4 text-xs text-red-400 hover:text-red-300 underline">Reset Checklist</button>
-             </div>
-        </div>
-
-        <!-- PLUGIN HELPER (Existing) -->
+        <!-- EXPANDED: PLUGIN HELPER -->
         <div id="plugins" class="tool-content">
-            <h2 class="text-2xl font-bold mb-6 flex items-center gap-2"><i class="fa-solid fa-plug text-purple-400"></i> Plugin Helper</h2>
+            <h2 class="text-2xl font-bold mb-6 flex items-center gap-2"><i class="fa-solid fa-plug text-purple-400"></i> Plugin Helper (Extended)</h2>
             
-            <div class="bg-sanop-card p-6 rounded-xl border border-slate-700 mb-6">
-                <div class="flex items-center gap-3 mb-4 border-b border-slate-700 pb-2">
-                    <i class="fa-solid fa-shield-cat text-green-400 text-xl"></i>
-                    <h3 class="font-bold text-lg text-white">LuckPerms (Permissions)</h3>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                        <label class="text-xs text-slate-400 block mb-1">Username Player</label>
-                        <input type="text" id="lp-user" placeholder="Steve" class="w-full bg-slate-900 border border-slate-600 rounded p-2 text-white text-sm">
-                    </div>
-                    <div>
-                        <label class="text-xs text-slate-400 block mb-1">Group / Rank</label>
-                        <input type="text" id="lp-group" placeholder="admin" class="w-full bg-slate-900 border border-slate-600 rounded p-2 text-white text-sm">
-                    </div>
-                    <div class="flex items-end">
-                        <button onclick="genLP()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 rounded text-sm transition">Generate Command</button>
-                    </div>
-                </div>
-                <div class="mt-4 bg-black p-3 rounded border border-slate-700 flex justify-between items-center">
-                    <code id="lp-result" class="text-green-400 text-sm font-mono">/lp user <name> parent set <group></code>
-                    <button onclick="copyToClipboard('lp-result-val')" class="text-xs bg-slate-800 px-2 py-1 rounded text-white hover:bg-slate-700">Copy</button>
-                    <input type="hidden" id="lp-result-val">
-                </div>
-            </div>
-             <!-- Essentials / General Section -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-sanop-card p-6 rounded-xl border border-slate-700">
-                    <div class="flex items-center gap-3 mb-4 border-b border-slate-700 pb-2">
-                        <i class="fa-solid fa-box-open text-yellow-400 text-xl"></i>
-                        <h3 class="font-bold text-lg text-white">EssentialsX / General</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- 1. LuckPerms -->
+                <div class="bg-sanop-card p-5 rounded-xl border border-slate-700">
+                    <div class="flex items-center gap-2 mb-3 border-b border-slate-700 pb-2">
+                        <i class="fa-solid fa-shield-cat text-green-400"></i>
+                        <h3 class="font-bold text-white">LuckPerms</h3>
                     </div>
                     <div class="space-y-2">
-                        <p class="text-xs text-slate-400 mb-2">Klik untuk menyalin command umum:</p>
-                        <button onclick="copyCmd('/gamemode creative')" class="w-full bg-slate-800 hover:bg-slate-700 text-left px-3 py-2 rounded text-sm text-blue-300 font-mono border border-slate-700 mb-2">/gamemode creative</button>
-                        <button onclick="copyCmd('/gamemode survival')" class="w-full bg-slate-800 hover:bg-slate-700 text-left px-3 py-2 rounded text-sm text-blue-300 font-mono border border-slate-700 mb-2">/gamemode survival</button>
-                        <button onclick="copyCmd('/time set day')" class="w-full bg-slate-800 hover:bg-slate-700 text-left px-3 py-2 rounded text-sm text-yellow-300 font-mono border border-slate-700 mb-2">/time set day</button>
-                        <button onclick="copyCmd('/weather clear')" class="w-full bg-slate-800 hover:bg-slate-700 text-left px-3 py-2 rounded text-sm text-blue-200 font-mono border border-slate-700">/weather clear</button>
+                        <input type="text" id="lp-user" placeholder="User (Steve)" class="w-full bg-slate-900 border border-slate-600 rounded p-1.5 text-xs text-white">
+                        <input type="text" id="lp-group" placeholder="Rank (admin)" class="w-full bg-slate-900 border border-slate-600 rounded p-1.5 text-xs text-white">
+                        <button onclick="genLP()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-1.5 rounded text-xs">Gen Set Rank</button>
                     </div>
                 </div>
-                 <!-- WorldEdit Section -->
-                <div class="bg-sanop-card p-6 rounded-xl border border-slate-700">
-                    <div class="flex items-center gap-3 mb-4 border-b border-slate-700 pb-2">
-                        <i class="fa-solid fa-hammer text-red-400 text-xl"></i>
-                        <h3 class="font-bold text-lg text-white">WorldEdit Quick Ref</h3>
+
+                <!-- 2. Essentials / Economy -->
+                <div class="bg-sanop-card p-5 rounded-xl border border-slate-700">
+                    <div class="flex items-center gap-2 mb-3 border-b border-slate-700 pb-2">
+                        <i class="fa-solid fa-coins text-yellow-400"></i>
+                        <h3 class="font-bold text-white">Economy (Vault)</h3>
                     </div>
                     <div class="space-y-2">
-                         <p class="text-xs text-slate-400 mb-2">Alat bantu builder:</p>
-                         <div class="grid grid-cols-2 gap-2">
-                            <button onclick="copyCmd('//wand')" class="bg-slate-800 hover:bg-slate-700 px-2 py-2 rounded text-xs text-red-300 font-mono border border-slate-700">//wand</button>
-                            <button onclick="copyCmd('//set 0')" class="bg-slate-800 hover:bg-slate-700 px-2 py-2 rounded text-xs text-red-300 font-mono border border-slate-700">//set 0 (Clear)</button>
-                            <button onclick="copyCmd('//undo')" class="bg-slate-800 hover:bg-slate-700 px-2 py-2 rounded text-xs text-red-300 font-mono border border-slate-700">//undo</button>
-                            <button onclick="copyCmd('//redo')" class="bg-slate-800 hover:bg-slate-700 px-2 py-2 rounded text-xs text-red-300 font-mono border border-slate-700">//redo</button>
-                            <button onclick="copyCmd('//br sphere stone 5')" class="col-span-2 bg-slate-800 hover:bg-slate-700 px-2 py-2 rounded text-xs text-red-300 font-mono border border-slate-700">//br sphere stone 5</button>
+                         <div class="flex gap-2">
+                            <input type="text" id="eco-user" placeholder="User" class="w-1/2 bg-slate-900 border border-slate-600 rounded p-1.5 text-xs text-white">
+                            <input type="number" id="eco-amt" placeholder="1000" class="w-1/2 bg-slate-900 border border-slate-600 rounded p-1.5 text-xs text-white">
                          </div>
+                         <button onclick="copyCmd(`/eco give ${document.getElementById('eco-user').value||'Player'} ${document.getElementById('eco-amt').value||1000}`)" class="w-full bg-slate-800 hover:bg-slate-700 text-white py-1.5 rounded text-xs border border-slate-600">/eco give (Add Money)</button>
+                         <button onclick="copyCmd(`/eco set ${document.getElementById('eco-user').value||'Player'} ${document.getElementById('eco-amt').value||1000}`)" class="w-full bg-slate-800 hover:bg-slate-700 text-white py-1.5 rounded text-xs border border-slate-600">/eco set (Set Money)</button>
                     </div>
                 </div>
+
+                <!-- 3. Multiverse -->
+                <div class="bg-sanop-card p-5 rounded-xl border border-slate-700">
+                    <div class="flex items-center gap-2 mb-3 border-b border-slate-700 pb-2">
+                        <i class="fa-solid fa-earth-americas text-blue-400"></i>
+                        <h3 class="font-bold text-white">Multiverse</h3>
+                    </div>
+                    <div class="space-y-2">
+                         <input type="text" id="mv-world" placeholder="World Name (Lobby)" class="w-full bg-slate-900 border border-slate-600 rounded p-1.5 text-xs text-white">
+                         <button onclick="copyCmd(`/mv create ${document.getElementById('mv-world').value||'world'} normal`)" class="w-full bg-slate-800 hover:bg-slate-700 text-white py-1.5 rounded text-xs border border-slate-600">Create Normal World</button>
+                         <button onclick="copyCmd(`/mv tp ${document.getElementById('mv-world').value||'world'}`)" class="w-full bg-slate-800 hover:bg-slate-700 text-white py-1.5 rounded text-xs border border-slate-600">Teleport to World</button>
+                    </div>
+                </div>
+
+                <!-- 4. AuthMe -->
+                <div class="bg-sanop-card p-5 rounded-xl border border-slate-700">
+                    <div class="flex items-center gap-2 mb-3 border-b border-slate-700 pb-2">
+                        <i class="fa-solid fa-lock text-orange-400"></i>
+                        <h3 class="font-bold text-white">AuthMe (Security)</h3>
+                    </div>
+                    <div class="space-y-2">
+                         <input type="text" id="auth-user" placeholder="User" class="w-full bg-slate-900 border border-slate-600 rounded p-1.5 text-xs text-white">
+                         <button onclick="copyCmd(`/authme register ${document.getElementById('auth-user').value||'Player'} password123`)" class="w-full bg-slate-800 hover:bg-slate-700 text-white py-1.5 rounded text-xs border border-slate-600">Force Register</button>
+                         <button onclick="copyCmd(`/authme unregister ${document.getElementById('auth-user').value||'Player'}`)" class="w-full bg-slate-800 hover:bg-slate-700 text-white py-1.5 rounded text-xs border border-slate-600">Force Unregister</button>
+                         <button onclick="copyCmd(`/authme changepassword ${document.getElementById('auth-user').value||'Player'} newpass`)" class="w-full bg-slate-800 hover:bg-slate-700 text-white py-1.5 rounded text-xs border border-slate-600">Change Pass</button>
+                    </div>
+                </div>
+
+                <!-- 5. ClearLag -->
+                <div class="bg-sanop-card p-5 rounded-xl border border-slate-700">
+                    <div class="flex items-center gap-2 mb-3 border-b border-slate-700 pb-2">
+                        <i class="fa-solid fa-broom text-red-400"></i>
+                        <h3 class="font-bold text-white">ClearLag / Opt</h3>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                         <button onclick="copyCmd('/lagg clear')" class="bg-slate-800 hover:bg-slate-700 text-white py-2 rounded text-xs border border-slate-600">Hapus Item</button>
+                         <button onclick="copyCmd('/lagg killmobs')" class="bg-slate-800 hover:bg-slate-700 text-white py-2 rounded text-xs border border-slate-600">Bunuh Mobs</button>
+                         <button onclick="copyCmd('/lagg unloadchunks')" class="bg-slate-800 hover:bg-slate-700 text-white py-2 rounded text-xs border border-slate-600">Unload Chunks</button>
+                         <button onclick="copyCmd('/lagg gc')" class="bg-slate-800 hover:bg-slate-700 text-white py-2 rounded text-xs border border-slate-600">Cek RAM (GC)</button>
+                    </div>
+                </div>
+
+                 <!-- 6. WorldEdit (Simplified) -->
+                <div class="bg-sanop-card p-5 rounded-xl border border-slate-700">
+                    <div class="flex items-center gap-2 mb-3 border-b border-slate-700 pb-2">
+                        <i class="fa-solid fa-hammer text-purple-400"></i>
+                        <h3 class="font-bold text-white">WorldEdit</h3>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="copyCmd('//wand')" class="bg-slate-800 hover:bg-slate-700 text-white py-2 rounded text-xs border border-slate-600">Wand Tool</button>
+                        <button onclick="copyCmd('//set 0')" class="bg-slate-800 hover:bg-slate-700 text-white py-2 rounded text-xs border border-slate-600">Hapus (Set 0)</button>
+                        <button onclick="copyCmd('//undo')" class="bg-slate-800 hover:bg-slate-700 text-white py-2 rounded text-xs border border-slate-600">Undo</button>
+                        <button onclick="copyCmd('//copy')" class="bg-slate-800 hover:bg-slate-700 text-white py-2 rounded text-xs border border-slate-600">Copy</button>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -894,9 +923,8 @@ online-mode=${!cracked}
             const user = document.getElementById('lp-user').value || "player";
             const group = document.getElementById('lp-group').value || "default";
             const cmd = `/lp user ${user} parent set ${group}`;
-            document.getElementById('lp-result').innerText = cmd;
-            document.getElementById('lp-result-val').value = cmd;
-            showToast("Command LuckPerms dibuat!");
+            showToast("Command LP disalin (simulasi)");
+            copyCmd(cmd);
         }
 
         function copyCmd(cmd) {
