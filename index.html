@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SANOP:MCTOOLS - Admin Dashboard</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        sanop: {
+                            bg: '#0f172a',
+                            card: '#1e293b',
+                            accent: '#3b82f6',
+                            success: '#10b981',
+                            danger: '#ef4444',
+                            text: '#f8fafc',
+                            muted: '#94a3b8'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+        .minecraft-font {
+            font-family: 'JetBrains Mono', monospace; /* Fallback for Minecraft style */
+            text-shadow: 2px 2px 0px #000;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+        .tool-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        .tool-content.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .motd-preview span {
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col md:flex-row overflow-hidden font-sans">
+
+    <!-- Sidebar Navigation -->
+    <aside class="w-full md:w-64 bg-sanop-card border-r border-slate-700 flex flex-col z-20 shadow-xl">
+        <div class="p-6 border-b border-slate-700 flex items-center gap-3">
+            <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/20">
+                <i class="fa-solid fa-server text-xl text-white"></i>
+            </div>
+            <div>
+                <h1 class="font-bold text-lg tracking-wider text-white">SANOP</h1>
+                <p class="text-xs text-blue-400 font-mono">MCTOOLS v1.0</p>
+            </div>
+        </div>
+
+        <nav class="flex-1 overflow-y-auto p-4 space-y-2">
+            <button onclick="switchTab('dashboard')" class="nav-btn w-full text-left px-4 py-3 rounded-lg hover:bg-slate-700 transition-all text-slate-300 hover:text-white flex items-center gap-3 active-nav bg-blue-900/30 text-blue-400 border border-blue-500/30" id="btn-dashboard">
+                <i class="fa-solid fa-gauge w-5 text-center"></i> Dashboard
+            </button>
+            <button onclick="switchTab('status')" class="nav-btn w-full text-left px-4 py-3 rounded-lg hover:bg-slate-700 transition-all text-slate-300 hover:text-white flex items-center gap-3" id="btn-status">
+                <i class="fa-solid fa-signal w-5 text-center"></i> Server Checker
+            </button>
+            <button onclick="switchTab('motd')" class="nav-btn w-full text-left px-4 py-3 rounded-lg hover:bg-slate-700 transition-all text-slate-300 hover:text-white flex items-center gap-3" id="btn-motd">
+                <i class="fa-solid fa-pen-nib w-5 text-center"></i> MOTD Editor
+            </button>
+            <button onclick="switchTab('security')" class="nav-btn w-full text-left px-4 py-3 rounded-lg hover:bg-slate-700 transition-all text-slate-300 hover:text-white flex items-center gap-3" id="btn-security">
+                <i class="fa-solid fa-shield-halved w-5 text-center"></i> Security Gen
+            </button>
+            <button onclick="switchTab('calc')" class="nav-btn w-full text-left px-4 py-3 rounded-lg hover:bg-slate-700 transition-all text-slate-300 hover:text-white flex items-center gap-3" id="btn-calc">
+                <i class="fa-solid fa-calculator w-5 text-center"></i> RAM Calc
+            </button>
+            <button onclick="switchTab('notes')" class="nav-btn w-full text-left px-4 py-3 rounded-lg hover:bg-slate-700 transition-all text-slate-300 hover:text-white flex items-center gap-3" id="btn-notes">
+                <i class="fa-solid fa-clipboard w-5 text-center"></i> Admin Notes
+            </button>
+        </nav>
+
+        <div class="p-4 border-t border-slate-700">
+            <div class="bg-slate-900 rounded p-3 text-xs text-slate-400 font-mono">
+                <div class="flex justify-between mb-1">
+                    <span>CPU Load</span>
+                    <span class="text-green-400">12%</span>
+                </div>
+                <div class="w-full bg-slate-700 h-1.5 rounded-full mb-2">
+                    <div class="bg-green-500 h-1.5 rounded-full" style="width: 12%"></div>
+                </div>
+                <div class="flex justify-between mb-1">
+                    <span>Memory</span>
+                    <span class="text-blue-400">45%</span>
+                </div>
+                <div class="w-full bg-slate-700 h-1.5 rounded-full">
+                    <div class="bg-blue-500 h-1.5 rounded-full" style="width: 45%"></div>
+                </div>
+                <div class="mt-3 text-center text-[10px] text-slate-500">
+                    System: Online
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto p-4 md:p-8 bg-sanop-bg relative">
+        
+        <!-- Header Mobile Only -->
+        <div class="md:hidden mb-6 flex items-center justify-between">
+             <h2 class="text-xl font-bold">SANOP:MCTOOLS</h2>
+             <span class="text-xs bg-green-900 text-green-300 px-2 py-1 rounded">ONLINE</span>
+        </div>
+
+        <!-- DASHBOARD VIEW -->
+        <div id="dashboard" class="tool-content active">
+            <header class="mb-8">
+                <h2 class="text-3xl font-bold mb-2">Selamat Datang, Admin.</h2>
+                <p class="text-slate-400">Pusat kontrol alat bantu server Anda.</p>
+            </header>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Quick Stats -->
+                <div class="bg-sanop-card p-6 rounded-xl border border-slate-700 shadow-lg hover:border-blue-500/50 transition-colors cursor-pointer" onclick="switchTab('status')">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 bg-blue-500/10 rounded-lg text-blue-400">
+                            <i class="fa-solid fa-wifi text-xl"></i>
+                        </div>
+                        <span class="text-xs text-slate-500 font-mono">TOOL #1</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-1">Server Checker</h3>
+                    <p class="text-sm text-slate-400">Cek status online, player count, dan latency server Minecraft/Web.</p>
+                </div>
+
+                <div class="bg-sanop-card p-6 rounded-xl border border-slate-700 shadow-lg hover:border-green-500/50 transition-colors cursor-pointer" onclick="switchTab('security')">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 bg-green-500/10 rounded-lg text-green-400">
+                            <i class="fa-solid fa-key text-xl"></i>
+                        </div>
+                        <span class="text-xs text-slate-500 font-mono">TOOL #2</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-1">Generator Kunci</h3>
+                    <p class="text-sm text-slate-400">Buat UUID, Password kompleks, dan Token API dengan cepat.</p>
+                </div>
+
+                <div class="bg-sanop-card p-6 rounded-xl border border-slate-700 shadow-lg hover:border-purple-500/50 transition-colors cursor-pointer" onclick="switchTab('motd')">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 bg-purple-500/10 rounded-lg text-purple-400">
+                            <i class="fa-solid fa-palette text-xl"></i>
+                        </div>
+                        <span class="text-xs text-slate-500 font-mono">TOOL #3</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-1">MOTD Designer</h3>
+                    <p class="text-sm text-slate-400">Preview tampilan pesan server dengan kode warna & hex.</p>
+                </div>
+            </div>
+
+            <div class="mt-8 bg-sanop-card rounded-xl border border-slate-700 p-6">
+                <h3 class="font-bold text-lg mb-4 border-b border-slate-700 pb-2">Log Aktivitas Lokal</h3>
+                <div class="space-y-3" id="activity-log">
+                    <!-- Logs will appear here -->
+                    <div class="text-sm text-slate-500 font-mono">Menunggu aktivitas...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SERVER CHECKER VIEW -->
+        <div id="status" class="tool-content">
+            <h2 class="text-2xl font-bold mb-6 flex items-center gap-2"><i class="fa-solid fa-signal text-blue-500"></i> Server Status Checker</h2>
+            
+            <div class="bg-sanop-card p-6 rounded-xl border border-slate-700 max-w-2xl">
+                <div class="flex gap-2 mb-4">
+                    <input type="text" id="server-ip" placeholder="Masukkan IP Server (contoh: hypixel.net)" 
+                        class="flex-1 bg-slate-900 border border-slate-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 font-mono">
+                    <button onclick="checkServer()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-bold transition-colors">
+                        Check
+                    </button>
+                </div>
+                <p class="text-xs text-slate-500 mb-6">*Menggunakan API mcsrvstat.us untuk data Minecraft</p>
+
+                <div id="status-result" class="hidden">
+                    <div class="border-t border-slate-700 pt-6 animate-pulse" id="loading-skeleton">
+                        <div class="h-4 bg-slate-700 rounded w-1/4 mb-4"></div>
+                        <div class="h-20 bg-slate-700 rounded w-full mb-4"></div>
+                    </div>
+                    
+                    <div id="result-content" class="hidden">
+                        <div class="flex items-center gap-4 mb-6">
+                            <img id="server-icon" src="" class="w-16 h-16 rounded shadow-lg bg-slate-800" alt="Icon">
+                            <div>
+                                <h3 id="server-hostname" class="text-xl font-bold text-white">Hostname</h3>
+                                <div class="flex items-center gap-2 mt-1">
+                                    <span id="server-online-badge" class="px-2 py-0.5 rounded text-xs font-bold uppercase bg-green-500/20 text-green-400">Online</span>
+                                    <span id="server-ip-display" class="text-sm text-slate-400 font-mono">127.0.0.1</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4 mb-6">
+                            <div class="bg-slate-900 p-4 rounded-lg">
+                                <span class="text-xs text-slate-500 uppercase block mb-1">Players</span>
+                                <span id="server-players" class="text-xl font-mono text-blue-400">0 / 0</span>
+                            </div>
+                            <div class="bg-slate-900 p-4 rounded-lg">
+                                <span class="text-xs text-slate-500 uppercase block mb-1">Version</span>
+                                <span id="server-version" class="text-xl font-mono text-purple-400">Unknown</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-black/50 p-4 rounded-lg border border-slate-700">
+                            <span class="text-xs text-slate-500 uppercase block mb-2">MOTD (Raw)</span>
+                            <div id="server-motd" class="minecraft-font text-sm leading-relaxed text-slate-300"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MOTD EDITOR VIEW -->
+        <div id="motd" class="tool-content">
+            <h2 class="text-2xl font-bold mb-6 flex items-center gap-2"><i class="fa-solid fa-pen-nib text-purple-500"></i> MOTD Generator</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="bg-sanop-card p-6 rounded-xl border border-slate-700">
+                    <label class="block text-sm font-bold mb-2 text-slate-300">Input Text (Gunakan & untuk warna)</label>
+                    <textarea id="motd-input" rows="6" oninput="updateMotd()" 
+                        class="w-full bg-slate-900 border border-slate-600 rounded-lg p-4 text-white font-mono text-sm focus:outline-none focus:border-purple-500"
+                        placeholder="Contoh: &4&lADMIN &fServer Sedang &aONLINE"></textarea>
+                    
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        <button onclick="insertColor('&0')" class="w-6 h-6 bg-black border border-slate-600 rounded hover:scale-110 transition" title="Black"></button>
+                        <button onclick="insertColor('&4')" class="w-6 h-6 bg-red-800 rounded hover:scale-110 transition" title="Dark Red"></button>
+                        <button onclick="insertColor('&c')" class="w-6 h-6 bg-red-500 rounded hover:scale-110 transition" title="Red"></button>
+                        <button onclick="insertColor('&6')" class="w-6 h-6 bg-orange-500 rounded hover:scale-110 transition" title="Gold"></button>
+                        <button onclick="insertColor('&e')" class="w-6 h-6 bg-yellow-400 rounded hover:scale-110 transition" title="Yellow"></button>
+                        <button onclick="insertColor('&2')" class="w-6 h-6 bg-green-800 rounded hover:scale-110 transition" title="Dark Green"></button>
+                        <button onclick="insertColor('&a')" class="w-6 h-6 bg-green-500 rounded hover:scale-110 transition" title="Green"></button>
+                        <button onclick="insertColor('&b')" class="w-6 h-6 bg-cyan-400 rounded hover:scale-110 transition" title="Aqua"></button>
+                        <button onclick="insertColor('&3')" class="w-6 h-6 bg-teal-700 rounded hover:scale-110 transition" title="Dark Aqua"></button>
+                        <button onclick="insertColor('&1')" class="w-6 h-6 bg-blue-800 rounded hover:scale-110 transition" title="Dark Blue"></button>
+                        <button onclick="insertColor('&9')" class="w-6 h-6 bg-blue-500 rounded hover:scale-110 transition" title="Blue"></button>
+                        <button onclick="insertColor('&d')" class="w-6 h-6 bg-pink-500 rounded hover:scale-110 transition" title="Light Purple"></button>
+                        <button onclick="insertColor('&5')" class="w-6 h-6 bg-purple-800 rounded hover:scale-110 transition" title="Dark Purple"></button>
+                        <button onclick="insertColor('&f')" class="w-6 h-6 bg-white border border-slate-600 rounded hover:scale-110 transition" title="White"></button>
+                    </div>
+                    <div class="mt-2 text-xs text-slate-500">Klik warna untuk menyisipkan kode.</div>
+                </div>
+
+                <div class="bg-sanop-card p-6 rounded-xl border border-slate-700">
+                    <label class="block text-sm font-bold mb-2 text-slate-300">Server List Preview</label>
+                    
+                    <!-- Minecraft Server List Item Mockup -->
+                    <div class="bg-[#1e1e1e] border-2 border-slate-600 p-2 flex gap-3 select-none">
+                        <div class="w-16 h-16 bg-slate-700 flex items-center justify-center text-slate-500">
+                            <i class="fa-solid fa-cube text-2xl"></i>
+                        </div>
+                        <div class="flex-1 overflow-hidden">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-white font-bold text-lg">Minecraft Server</span>
+                                <span class="text-slate-400 text-xs">123/500</span>
+                            </div>
+                            <div id="motd-preview" class="minecraft-font text-sm leading-tight text-slate-400 whitespace-pre-wrap">
+                                Preview text will appear here...
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-end justify-start pt-1">
+                            <i class="fa-solid fa-signal text-green-500 text-xs"></i>
+                        </div>
+                    </div>
+
+                    <button onclick="copyMotd()" class="mt-4 w-full bg-slate-700 hover:bg-slate-600 text-white py-2 rounded-lg text-sm transition font-mono border border-slate-600">
+                        <i class="fa-regular fa-copy"></i> Copy Raw Text
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECURITY GEN VIEW -->
+        <div id="security" class="tool-content">
+            <h2 class="text-2xl font-bold mb-6 flex items-center gap-2"><i class="fa-solid fa-shield-halved text-green-500"></i> Security Generator</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Password Gen -->
+                <div class="bg-sanop-card p-6 rounded-xl border border-slate-700">
+                    <h3 class="font-bold text-lg mb-4 text-white">Password Generator</h3>
+                    
+                    <div class="mb-4">
+                        <label class="text-xs text-slate-400 uppercase">Panjang: <span id="pass-len-val">16</span></label>
+                        <input type="range" id="pass-len" min="8" max="64" value="16" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-green-500" oninput="document.getElementById('pass-len-val').innerText = this.value">
+                    </div>
+
+                    <div class="flex gap-4 mb-4">
+                        <label class="flex items-center gap-2 text-sm text-slate-300 cursor-pointer">
+                            <input type="checkbox" id="chk-upper" checked class="accent-green-500"> A-Z
+                        </label>
+                        <label class="flex items-center gap-2 text-sm text-slate-300 cursor-pointer">
+                            <input type="checkbox" id="chk-num" checked class="accent-green-500"> 0-9
+                        </label>
+                        <label class="flex items-center gap-2 text-sm text-slate-300 cursor-pointer">
+                            <input type="checkbox" id="chk-sym" checked class="accent-green-500"> !@#
+                        </label>
+                    </div>
+
+                    <div class="relative">
+                        <input type="text" id="gen-pass-result" readonly class="w-full bg-slate-900 border border-slate-600 rounded px-4 py-3 font-mono text-green-400 text-sm focus:outline-none mb-2">
+                        <button onclick="copyToClipboard('gen-pass-result')" class="absolute right-2 top-2 bg-slate-800 text-white p-1 px-2 rounded hover:bg-slate-700 text-xs">Copy</button>
+                    </div>
+
+                    <button onclick="generatePassword()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 rounded-lg transition mt-2">Generate Password</button>
+                </div>
+
+                <!-- UUID Gen -->
+                <div class="bg-sanop-card p-6 rounded-xl border border-slate-700">
+                    <h3 class="font-bold text-lg mb-4 text-white">UUID v4 Generator</h3>
+                    <p class="text-xs text-slate-400 mb-4">Berguna untuk memberikan ID unik pada item, player spoofing, atau database entry.</p>
+                    
+                    <div class="relative mb-4">
+                        <input type="text" id="gen-uuid-result" readonly class="w-full bg-slate-900 border border-slate-600 rounded px-4 py-3 font-mono text-blue-400 text-sm focus:outline-none">
+                         <button onclick="copyToClipboard('gen-uuid-result')" class="absolute right-2 top-2 bg-slate-800 text-white p-1 px-2 rounded hover:bg-slate-700 text-xs">Copy</button>
+                    </div>
+
+                    <button onclick="generateUUID()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg transition">Generate UUID</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- RAM CALC VIEW -->
+        <div id="calc" class="tool-content">
+            <h2 class="text-2xl font-bold mb-6 flex items-center gap-2"><i class="fa-solid fa-calculator text-yellow-500"></i> Server RAM Estimator</h2>
+            
+            <div class="bg-sanop-card p-6 rounded-xl border border-slate-700 max-w-2xl">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-sm text-slate-400 mb-1">Tipe Server</label>
+                        <select id="srv-type" class="w-full bg-slate-900 border border-slate-600 rounded p-2 text-white">
+                            <option value="vanilla">Vanilla / Bedrock (Ringan)</option>
+                            <option value="paper">Paper / Spigot (Optimal)</option>
+                            <option value="forge">Forge / Modded (Berat)</option>
+                            <option value="bungee">BungeeCord / Velocity (Proxy)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm text-slate-400 mb-1">Target Players</label>
+                        <input type="number" id="srv-players" value="10" class="w-full bg-slate-900 border border-slate-600 rounded p-2 text-white">
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 p-4 rounded-lg border border-slate-700 mb-4">
+                    <h4 class="text-slate-400 text-xs uppercase mb-2">Estimasi Rekomendasi RAM</h4>
+                    <div class="flex items-end gap-2">
+                        <span id="ram-result" class="text-3xl font-bold text-yellow-400">2 GB</span>
+                        <span class="text-sm text-slate-500 mb-1">DDR4/DDR5</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-2">*Perhitungan kasar. Plugin berat atau modpack besar membutuhkan lebih banyak.</p>
+                </div>
+
+                <button onclick="calcRam()" class="bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-2 rounded font-bold w-full">Hitung</button>
+            </div>
+        </div>
+
+        <!-- NOTES VIEW -->
+        <div id="notes" class="tool-content">
+             <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold flex items-center gap-2"><i class="fa-solid fa-clipboard text-pink-500"></i> Admin Notes</h2>
+                <button onclick="saveNotes()" class="bg-green-600 text-white px-4 py-2 rounded text-sm hover:bg-green-700"><i class="fa-solid fa-save"></i> Save</button>
+             </div>
+             
+             <div class="bg-sanop-card rounded-xl border border-slate-700 overflow-hidden h-[calc(100vh-200px)]">
+                 <textarea id="admin-notes" class="w-full h-full bg-slate-900 p-6 text-slate-300 font-mono text-sm focus:outline-none resize-none" 
+                 placeholder="// Tulis catatan server, daftar ban, atau ide config di sini...
+// Tersimpan otomatis di browser local storage."></textarea>
+             </div>
+        </div>
+
+    </main>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- Navigation Logic ---
+        function switchTab(tabId) {
+            // Hide all content
+            document.querySelectorAll('.tool-content').forEach(el => {
+                el.classList.remove('active');
+            });
+            // Show target
+            document.getElementById(tabId).classList.add('active');
+
+            // Reset nav styles
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active-nav', 'bg-blue-900/30', 'text-blue-400', 'border', 'border-blue-500/30');
+                btn.classList.add('text-slate-300');
+            });
+
+            // Set active nav style
+            const activeBtn = document.getElementById('btn-' + tabId);
+            activeBtn.classList.add('active-nav', 'bg-blue-900/30', 'text-blue-400', 'border', 'border-blue-500/30');
+            activeBtn.classList.remove('text-slate-300');
+
+            addLog(`Membuka menu: ${tabId.toUpperCase()}`);
+        }
+
+        // --- Activity Log System ---
+        function addLog(msg) {
+            const container = document.getElementById('activity-log');
+            const time = new Date().toLocaleTimeString('id-ID');
+            const div = document.createElement('div');
+            div.className = "flex gap-3 text-sm animate-pulse";
+            div.innerHTML = `<span class="text-slate-600 font-mono">[${time}]</span> <span class="text-slate-300">${msg}</span>`;
+            
+            // Limit logs
+            if(container.children.length > 8) container.removeChild(container.lastChild);
+            
+            container.prepend(div);
+            // Remove animation after a bit
+            setTimeout(() => div.classList.remove('animate-pulse'), 1000);
+        }
+
+        // --- Server Checker Logic (API) ---
+        async function checkServer() {
+            const ip = document.getElementById('server-ip').value;
+            if(!ip) return alert("Masukkan IP Server!");
+
+            const loader = document.getElementById('loading-skeleton');
+            const content = document.getElementById('result-content');
+            const resultBox = document.getElementById('status-result');
+
+            resultBox.classList.remove('hidden');
+            loader.classList.remove('hidden');
+            content.classList.add('hidden');
+
+            addLog(`Memeriksa status server: ${ip}`);
+
+            try {
+                // Using mcsrvstat.us API
+                const response = await fetch(`https://api.mcsrvstat.us/2/${ip}`);
+                const data = await response.json();
+
+                loader.classList.add('hidden');
+                content.classList.remove('hidden');
+
+                document.getElementById('server-ip-display').innerText = data.ip + (data.port ? ':'+data.port : '');
+                document.getElementById('server-hostname').innerText = data.hostname || ip;
+                
+                if(data.online) {
+                    document.getElementById('server-online-badge').className = "px-2 py-0.5 rounded text-xs font-bold uppercase bg-green-500/20 text-green-400";
+                    document.getElementById('server-online-badge').innerText = "ONLINE";
+                    document.getElementById('server-players').innerText = `${data.players.online} / ${data.players.max}`;
+                    document.getElementById('server-version').innerText = data.version;
+                    
+                    // Icon
+                    document.getElementById('server-icon').src = data.icon || "https://via.placeholder.com/64?text=MC";
+
+                    // MOTD HTML is provided by API sometimes, but let's be safe
+                    if(data.motd && data.motd.html) {
+                        document.getElementById('server-motd').innerHTML = data.motd.html.join('<br>');
+                    } else {
+                        document.getElementById('server-motd').innerText = "No MOTD";
+                    }
+                } else {
+                    document.getElementById('server-online-badge').className = "px-2 py-0.5 rounded text-xs font-bold uppercase bg-red-500/20 text-red-400";
+                    document.getElementById('server-online-badge').innerText = "OFFLINE";
+                    document.getElementById('server-players').innerText = "-";
+                    document.getElementById('server-version').innerText = "-";
+                    document.getElementById('server-motd').innerText = "Server tidak dapat dijangkau.";
+                    document.getElementById('server-icon').src = "https://via.placeholder.com/64?text=OFF";
+                }
+
+            } catch (err) {
+                console.error(err);
+                loader.classList.add('hidden');
+                alert("Gagal mengambil data API.");
+            }
+        }
+
+        // --- MOTD Editor Logic ---
+        function insertColor(code) {
+            const textarea = document.getElementById('motd-input');
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const text = textarea.value;
+            const before = text.substring(0, start);
+            const after = text.substring(end, text.length);
+            
+            textarea.value = before + code + after;
+            textarea.selectionStart = textarea.selectionEnd = start + code.length;
+            textarea.focus();
+            updateMotd();
+        }
+
+        function updateMotd() {
+            let text = document.getElementById('motd-input').value;
+            // Simple Parser for Minecraft Color Codes
+            const colorMap = {
+                '0': '#000000', '1': '#0000AA', '2': '#00AA00', '3': '#00AAAA',
+                '4': '#AA0000', '5': '#AA00AA', '6': '#FFAA00', '7': '#AAAAAA',
+                '8': '#555555', '9': '#5555FF', 'a': '#55FF55', 'b': '#55FFFF',
+                'c': '#FF5555', 'd': '#FF55FF', 'e': '#FFFF55', 'f': '#FFFFFF'
+            };
+
+            let formatted = '';
+            let currentColor = '#AAAAAA'; // Default gray
+            let isBold = false;
+            let parts = text.split(/&(?=[0-9a-fk-or])/g);
+
+            parts.forEach((part, index) => {
+                if (index === 0 && part.length > 0) {
+                     formatted += `<span style="color:${currentColor}">${part}</span>`;
+                     return;
+                }
+
+                if (part.length === 0) return;
+
+                const code = part.charAt(0);
+                const content = part.substring(1);
+
+                if (colorMap[code]) {
+                    currentColor = colorMap[code];
+                    isBold = false; // Reset format on color change usually
+                } else if (code === 'l') {
+                    isBold = true;
+                } else if (code === 'r') {
+                    currentColor = '#AAAAAA';
+                    isBold = false;
+                }
+
+                formatted += `<span style="color:${currentColor}; font-weight:${isBold ? 'bold' : 'normal'}">${content}</span>`;
+            });
+
+            // If empty
+            if(!text) formatted = "Preview text will appear here...";
+
+            document.getElementById('motd-preview').innerHTML = formatted;
+        }
+
+        function copyMotd() {
+            const text = document.getElementById('motd-input').value;
+            navigator.clipboard.writeText(text);
+            addLog("Menyalin MOTD mentah ke clipboard.");
+            alert("Disalin!");
+        }
+
+        // --- Security Gen Logic ---
+        function generatePassword() {
+            const len = document.getElementById('pass-len').value;
+            const useUpper = document.getElementById('chk-upper').checked;
+            const useNum = document.getElementById('chk-num').checked;
+            const useSym = document.getElementById('chk-sym').checked;
+
+            const lower = "abcdefghijklmnopqrstuvwxyz";
+            const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const num = "0123456789";
+            const sym = "!@#$%^&*()_+{}[]";
+
+            let chars = lower;
+            if(useUpper) chars += upper;
+            if(useNum) chars += num;
+            if(useSym) chars += sym;
+
+            let pass = "";
+            for(let i=0; i<len; i++) {
+                pass += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+
+            document.getElementById('gen-pass-result').value = pass;
+            addLog("Password baru dibuat.");
+        }
+
+        function generateUUID() {
+            // Basic UUID v4 gen
+            const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+            document.getElementById('gen-uuid-result').value = uuid;
+            addLog("UUID baru dibuat.");
+        }
+
+        function copyToClipboard(elementId) {
+            const copyText = document.getElementById(elementId);
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(copyText.value);
+            addLog("Data security disalin.");
+        }
+
+        // --- RAM Calc Logic ---
+        function calcRam() {
+            const type = document.getElementById('srv-type').value;
+            const players = parseInt(document.getElementById('srv-players').value) || 0;
+            
+            let base = 1; // 1GB base for OS/Java overhead
+            let perPlayer = 0.05; // 50MB default
+
+            if(type === 'vanilla') perPlayer = 0.04;
+            if(type === 'paper') perPlayer = 0.03; // Optimized
+            if(type === 'forge') { base = 3; perPlayer = 0.15; } // Heavy
+            if(type === 'bungee') { base = 0.5; perPlayer = 0.005; } // Very light
+
+            let total = base + (players * perPlayer);
+            
+            // Round up to nearest 0.5
+            total = Math.ceil(total * 2) / 2;
+
+            document.getElementById('ram-result').innerText = total + " GB";
+            addLog(`Kalkulasi RAM untuk ${players} players (${type}).`);
+        }
+
+        // --- Notes Logic (Local Storage) ---
+        function loadNotes() {
+            const saved = localStorage.getItem('sanop_admin_notes');
+            if(saved) document.getElementById('admin-notes').value = saved;
+        }
+
+        function saveNotes() {
+            const text = document.getElementById('admin-notes').value;
+            localStorage.setItem('sanop_admin_notes', text);
+            addLog("Catatan admin disimpan ke LocalStorage.");
+            alert("Catatan Tersimpan!");
+        }
+
+        // Init
+        window.onload = function() {
+            generatePassword();
+            generateUUID();
+            loadNotes();
+            addLog("Sistem SANOP:MCTOOLS siap.");
+        }
+
+    </script>
+</body>
+</html>
