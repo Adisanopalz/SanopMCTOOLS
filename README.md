@@ -1,2 +1,3 @@
 # SanopMCTOOLS
-A demo web App for MCTOOLS : ADMIN Dashboard. 
+A demo web App for Minecraft MCTOOLS : ADMIN Dashboard. 
+http://sanopmctools.vercel.app/
